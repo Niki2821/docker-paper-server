@@ -1,0 +1,22 @@
+services:
+  paper-server:
+    build:
+      context: .
+      args:
+        #jarDownloadLink: "<link>" # if another minecraft server jar is needed
+        minRam: 2G
+        maxRam: 3G
+    stdin_open: true #allows docker attach to use the server console
+    tty: true
+    ports:
+      - "25565:25565"
+    environment: #can be adjusted after building
+      - minRamEnv=2G
+      - maxRamEnv=3G
+    volumes:
+      - ./server-data/server-world:/minecraft/world
+      - ./server-data/server-world_nether:/minecraft/world_nether
+      - ./server-data/server-world_the_end:/minecraft/world_the_end
+      - ./server-data/server-plugins:/minecraft/plugins #folder for plugns jars
+      - ${PWD}/server-data/whitelist.json:/minecraft/whitelist.json #saving whitelist file
+      - ${PWD}/server.properties:/minecraft/server.properties #saving server properties file
