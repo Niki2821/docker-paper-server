@@ -13,7 +13,7 @@ ENV maxRamEnv=$maxRam
 
 WORKDIR /minecraft
 
-#copy server.properties
+#copy server.properties, TODO: only copy config files not the world data
 COPY . .
 
 #install java
@@ -28,6 +28,14 @@ RUN echo "eula=true" > eula.txt
 #print ram allocation values for debugging
 RUN echo "Minimum allocated Ram: $minRamEnv"
 RUN echo "Maximum allocated Ram: $maxRamEnv"
+
+#allow minecraft user to access server data
+RUN chmod -R 777 ./
+
+#add and use minecraft user to avoid running the server as root
+RUN adduser -D minecraft
+USER minecraft
+
 
 #expose minecraft port
 EXPOSE 25565
